@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+    <property file = "build.properties"/>
+    <path id = "classpath">
+        <pathelement location = "${bin.dir}" />
+    </path>
+    <target name = "test" depends = "compile" description = "Test the Calculator Class"></target>
+    <target name = "run" depends = "compile" description = "run the Main.class file">
+        <java classname = "Calculator.Main">
+            <classpath>
+                <pathelement location = "${bin.dir}" />
+            </classpath>
+        </java>
+    </target>
+
+    <target name = "clean" description = "clean the .class files in ${bin.dir}">
+        <delete>
+            <fileset dir = "${bin.dir}">
+                <include name = "*.class"/>
+            </fileset>
+        </delete>
+    </target>
+
+    <target name = "unittest">
+        <junit haltonfailure = "true" printsummary = "true">
+            <test name = "com.tutorialspoint.UtilsTest"/>
+        </junit>
+    </target>
+
+    <target name = "compile" depends = "clean" description = "compile the source file that exist in ${src.dir}">
+        <javac includeantruntime = "false" destdir = "${bin.dir}">
+            <src path = "${src.dir}"/>
+        </javac>
+    </target>
+</project>
