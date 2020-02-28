@@ -32,8 +32,7 @@
         <mkdir dir="${test.dir}"/>
         <javac includeantruntime = "false" destdir = "${test.class.dir}">
             <classpath>
-
-                <fileset dir="${junit.dir}">
+                <fileset dir="${lib.dir}">
                     <include name="**/*.jar" />
                 </fileset>
                 <pathelement location="${bin.dir}"/>
@@ -43,15 +42,16 @@
         </javac>
     </target>
 
-    <target name = "unittest" depends = "compile-test" description = "perform junit testing on class TestCalculator">
+    <target name = "junit" depends = "compile-test" description = "perform junit testing on class TestCalculator">
         <junit haltonfailure = "true" printsummary = "true" fork="true">
             <classpath>
-                <pathelement location="./lib/junit.jar"/>
-                <pathelement location="./lib/hamcrest-core-1.3.jar"/>
+                <fileset dir="${lib.dir}">
+                    <include name="**/*.jar" />
+                </fileset>
                 <pathelement location="${bin.dir}"/>
                 <pathelement location="${test.class.dir}"/>
             </classpath>
-            <formatter type="brief" usefile="false"/>
+            <formatter type="plain" usefile="false" />
             <batchtest >
                 <fileset dir="${result.testclasses.dir}">
                     <include name="**/*Test.class"/>
