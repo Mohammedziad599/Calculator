@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project>
+<project name="Calculator" default="run" basedir="./">
     <property file = "build.properties"/>
-    <path id = "classpath">
-        <pathelement location = "${bin.dir}" />
-    </path>
-    <target name = "test" depends = "compile" description = "Test the Calculator Class"></target>
+
     <target name = "run" depends = "compile" description = "run the Main.class file">
         <java classname = "Calculator.Main">
             <classpath>
@@ -14,20 +11,58 @@
     </target>
 
     <target name = "clean" description = "clean the .class files in ${bin.dir}">
+        <mkdir dir="${bin.dir}"/>
+        <mkdir dir="${src.dir}"/>
+        <mkdir dir="${test.class.dir}"/>
+        <mkdir dir="${test.dir}"/>
         <delete>
             <fileset dir = "${bin.dir}">
                 <include name = "*.class"/>
             </fileset>
         </delete>
+        <delete>
+            <fileset dir = "${test.class.dir}">
+                <include name = "*.class"/>
+            </fileset>
+        </delete>
     </target>
 
-    <target name = "unittest">
-        <junit haltonfailure = "true" printsummary = "true">
-            <test name = "com.tutorialspoint.UtilsTest"/>
+    <target name = "compile-test" depends = "compile">
+        <mkdir dir="${test.class.dir}"/>
+        <mkdir dir="${test.dir}"/>
+        <javac includeantruntime = "false" destdir = "${test.class.dir}">
+            <classpath>
+
+                <fileset dir="${junit.dir}">
+                    <include name="**/*.jar" />
+                </fileset>
+                <pathelement location="${bin.dir}"/>
+                <pathelement location="${test.class.dir}"/>
+            </classpath>
+            <src path = "${test.dir}"/>
+        </javac>
+    </target>
+
+    <target name = "unittest" depends = "compile-test" description = "perform junit testing on class TestCalculator">
+        <junit haltonfailure = "true" printsummary = "true" fork="true">
+            <classpath>
+                <pathelement location="./lib/junit.jar"/>
+                <pathelement location="./lib/hamcrest-core-1.3.jar"/>
+                <pathelement location="${bin.dir}"/>
+                <pathelement location="${test.class.dir}"/>
+            </classpath>
+            <formatter type="brief" usefile="false"/>
+            <batchtest >
+                <fileset dir="${result.testclasses.dir}">
+                    <include name="**/*Test.class"/>
+                </fileset>
+            </batchtest>
         </junit>
     </target>
 
     <target name = "compile" depends = "clean" description = "compile the source file that exist in ${src.dir}">
+        <mkdir dir="${bin.dir}"/>
+        <mkdir dir="${src.dir}"/>
         <javac includeantruntime = "false" destdir = "${bin.dir}">
             <src path = "${src.dir}"/>
         </javac>

@@ -1,9 +1,0 @@
-/**
- * 
- */
-/**
- * @author mohammedziad
- *
- */
-module Calculator {
-}
